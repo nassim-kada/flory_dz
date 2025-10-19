@@ -18,9 +18,9 @@ export default function Home() {
       serviceFee = 500;
     } else if (usdPrice >= 3 && usdPrice < 10) {
       serviceFee = 1000;
-    } else if (usdPrice >= 10 && usdPrice < 25) {
+    } else if (usdPrice >= 10 && usdPrice < 30) {
       serviceFee = 1500;
-    } else if (usdPrice >= 25) {
+    } else if (usdPrice >= 30) {
       serviceFee = 2000;
     }
 
@@ -171,27 +171,6 @@ export default function Home() {
                   $
                 </div>
               </motion.div>
-              
-              <AnimatePresence>
-                {dollarPrice && parseFloat(dollarPrice) >= 1 && (
-                  <motion.div 
-                    className="mt-2 sm:mt-6 p-2 sm:p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg sm:rounded-xl border border-blue-200"
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="flex items-center justify-between text-xs sm:text-sm">
-                      <span className="text-gray-600 font-medium">Base Rate:</span>
-                      <span className="font-bold text-gray-800">250 DA/USD</span>
-                    </div>
-                    <div className="flex items-center justify-between text-xs sm:text-sm mt-1 sm:mt-2">
-                      <span className="text-gray-600 font-medium">Service Fee:</span>
-                      <span className="font-bold text-blue-600">{fee} DA</span>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
 
             {/* Result Section */}
@@ -295,57 +274,6 @@ export default function Home() {
               </AnimatePresence>
             </motion.div>
           </div>
-
-          {/* Calculation Breakdown */}
-          <AnimatePresence>
-            {dollarPrice && parseFloat(dollarPrice) >= 1 && (
-              <motion.div 
-                className="mt-4 sm:mt-8 pt-3 sm:pt-6 border-t-2 border-gray-100"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ duration: 0.4 }}
-              >
-                <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-3 lg:gap-4 text-gray-600 text-xs sm:text-sm lg:text-base">
-                  <motion.span 
-                    className="font-medium"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 }}
-                  >
-                    {dollarPrice} USD
-                  </motion.span>
-                  <span className="text-base sm:text-xl lg:text-2xl">×</span>
-                  <motion.span 
-                    className="font-medium"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    250 DA
-                  </motion.span>
-                  <span className="text-base sm:text-xl lg:text-2xl">+</span>
-                  <motion.span 
-                    className="font-medium"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    {fee} DA
-                  </motion.span>
-                  <span className="text-base sm:text-xl lg:text-2xl">=</span>
-                  <motion.span 
-                    className="text-sm sm:text-lg lg:text-xl font-bold text-green-600"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.4, type: "spring" }}
-                  >
-                    {result?.toLocaleString()} DA
-                  </motion.span>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </motion.div>
       </div>
     </div>
