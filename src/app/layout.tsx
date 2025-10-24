@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "flory_dz.shop - Luxury Intermediary",
-  description: "Your modern and elegant price estimator for international shopping.",
+  description: "Your modern and elegant price estimator for shopping.",
 };
 
 export default function RootLayout({

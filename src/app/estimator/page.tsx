@@ -9,6 +9,9 @@ export default function PriceEstimator() {
   const [result, setResult] = useState<number | null>(null);
   const [fee, setFee] = useState(0);
   const [activeSection, setActiveSection] = useState('estimator');
+  const [isPageLoaded, setIsPageLoaded] = useState(false); // New state for content entrance
+  const [isResultUpdated, setIsResultUpdated] = useState(false); // New state for result pop
+
   const router = useRouter();
 
   const calculatePrice = (usdPrice: number): { total: number; fee: number } => {
@@ -35,11 +38,22 @@ export default function PriceEstimator() {
   };
 
   useEffect(() => {
+    // 1. Initial Page Load Animation
+    setIsPageLoaded(true);
+  }, []);
+
+  useEffect(() => {
     const price = parseFloat(dollarPrice);
     if (!isNaN(price) && price > 0) {
       const { total, fee: serviceFee } = calculatePrice(price);
       setResult(Math.round(total)); // Round to nearest DA
       setFee(serviceFee);
+      setIsResultUpdated(true); // Trigger result pop animation
+      
+      // Reset the pop state after the animation duration (e.g., 300ms)
+      const timer = setTimeout(() => setIsResultUpdated(false), 300);
+      return () => clearTimeout(timer);
+
     } else {
       setResult(null);
       setFee(0);
@@ -55,20 +69,24 @@ export default function PriceEstimator() {
     // For 'estimator', we're already on this page, so do nothing
   };
 
+  // Base transition class for content entrance
+  const contentTransitionClasses = `transition-all duration-700 ease-out ${
+    isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+  }`;
+
   return (
-    // Use the soft pink background for consistency
     <div className="min-h-screen bg-pink-50/50">
-      {/* Add Header component */}
       <Header activeSection={activeSection} onNavigate={handleNavigate} />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-16 sm:pb-24">
+      {/* Apply entrance animation to the main content container */}
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-16 sm:pb-24 ${contentTransitionClasses}`}>
         <div className="text-center mb-12 sm:mb-16 pt-4 sm:pt-8">
-          {/* Subtle badge for category */}
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-100 to-purple-100 px-4 py-1.5 rounded-full mb-4 sm:mb-6 shadow-inner">
+          {/* Subtle badge for category - added a small hover scale effect */}
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-100 to-purple-100 px-4 py-1.5 rounded-full mb-4 sm:mb-6 shadow-inner transition-transform hover:scale-[1.05]">
             <Calculator className="w-4 h-4 text-pink-600" />
             <span className="text-xs sm:text-sm font-semibold text-gray-700 uppercase tracking-widest">Pricing Tool</span>
           </div>
-          {/* Main title using the display font (Crafty Girls) */}
+          {/* Main title */}
           <h1 className="text-4xl sm:text-6xl font-bold text-gray-800 mb-4 font-serif-display leading-tight">
             Price Estimator
           </h1>
@@ -80,7 +98,6 @@ export default function PriceEstimator() {
         <div className="max-w-4xl mx-auto">
           {/* Main Calculator Card */}
           <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-10 lg:p-12 border-2 border-pink-100">
-            {/* Layout stacks vertically on mobile, uses 2 columns on large screens */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
               
               {/* Input Side */}
@@ -100,8 +117,8 @@ export default function PriceEstimator() {
                       placeholder="e.g. 15.99"
                       min="0"
                       step="0.01"
-                      // Input styling enhanced with soft colors and rounded corners
-                      className="w-full px-4 sm:px-6 py-4 sm:py-5 text-2xl sm:text-3xl font-bold text-gray-800 bg-pink-50 border-2 border-pink-200 rounded-xl focus:outline-none focus:border-pink-400 focus:ring-4 focus:ring-pink-100 transition-all  opacity-35 shadow-inner"
+                      // Input field animation: subtle scale and lift on focus
+                      className="w-full px-4 sm:px-6 py-4 sm:py-5 text-2xl sm:text-3xl font-bold text-gray-800 bg-pink-50 border-2 border-pink-200 rounded-xl focus:outline-none focus:border-pink-400 focus:ring-4 focus:ring-pink-100 transition-all duration-200 transform focus:scale-[1.01] opacity-35 shadow-inner"
                     />
                     <div className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 text-pink-400 text-xl sm:text-2xl font-bold pointer-events-none">
                       $
@@ -114,15 +131,16 @@ export default function PriceEstimator() {
                 </div>
               </div>
 
-              {/* Separator icon for desktop view */}
+              {/* Separator icon for desktop view - added a subtle pulse/spin effect */}
               <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-y-1/2 transform -translate-x-1/2">
-                <ArrowRight className="w-10 h-10 text-pink-300" />
+                <ArrowRight className="w-10 h-10 text-pink-300 animate-pulse-slow" />
               </div>
 
               {/* Output Side (Result) */}
               <div className="relative pt-4 lg:pt-0">
                 {result !== null ? (
-                  <div className="bg-gradient-to-br from-pink-100/70 via-white to-purple-100/70 rounded-2xl p-6 sm:p-8 border-2 border-pink-300 shadow-xl transition-all duration-500">
+                  // Result Card Animation: 'isResultUpdated' triggers a temporary scale effect
+                  <div className={`bg-gradient-to-br from-pink-100/70 via-white to-purple-100/70 rounded-2xl p-6 sm:p-8 border-2 border-pink-300 shadow-xl transition-all duration-300 transform ${isResultUpdated ? 'scale-[1.03] shadow-pink-400/50' : ''}`}>
                     <div className="text-center">
                       <div className="flex items-center justify-center gap-2 mb-4">
                         <Coins className="w-6 h-6 text-pink-600" />
@@ -130,7 +148,8 @@ export default function PriceEstimator() {
                           Estimated Total Price
                         </p>
                       </div>
-                      <p className="text-5xl sm:text-6xl font-black bg-gradient-primary text-gradient-primary leading-none mb-2 font-sans">
+                      {/* Add transition for the number itself for a smooth count-up/change */}
+                      <p className="text-5xl sm:text-6xl font-black bg-gradient-primary text-gradient-primary leading-none mb-2 font-sans transition-colors duration-300">
                         {result.toLocaleString('en-US')}
                       </p>
                       <p className="text-xl sm:text-2xl font-bold text-gray-600">DA</p>
@@ -153,8 +172,8 @@ export default function PriceEstimator() {
             </div>
           </div>
 
-          {/* Footer Terms */}
-          <div className="mt-8 bg-white rounded-2xl p-4 sm:p-6 border border-pink-100 shadow-md">
+          {/* Footer Terms - added a subtle animation on hover */}
+          <div className="mt-8 bg-white rounded-2xl p-4 sm:p-6 border border-pink-100 shadow-md transition-transform duration-300 hover:scale-[1.01] hover:shadow-lg">
             <p className="text-center text-gray-700 text-sm sm:text-base font-medium">
               <span className="font-bold text-pink-600">Payment Terms:</span> 50% deposit before delivery, 50% after receiving your order.
             </p>
