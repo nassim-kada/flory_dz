@@ -1,8 +1,44 @@
 'use client';
 
-import { Sparkles, Truck, Shield, Heart, Instagram, Facebook, Globe } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Sparkles, Truck, Shield, Heart, Globe } from 'lucide-react';
+import { motion, Variants } from 'framer-motion';
 import SocialLinks from './SocialLinks';
+
+// Animation variants with proper TypeScript typing
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 0.6, 
+      ease: [0.25, 0.4, 0.25, 1] as [number, number, number, number] 
+    }
+  }
+};
+
+const highlightVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { 
+    opacity: 1, 
+    scale: 1,
+    transition: { 
+      duration: 0.8, 
+      ease: [0.34, 1.56, 0.64, 1] as [number, number, number, number] 
+    }
+  }
+};
 
 // Service Card Component - Modern animated card
 function ServiceCard({ icon, title, description, index }: { icon: React.ReactNode; title: string; description: string; index: number }) {
@@ -14,7 +50,7 @@ function ServiceCard({ icon, title, description, index }: { icon: React.ReactNod
       transition={{ 
         duration: 0.5, 
         delay: index * 0.1,
-        ease: [0.25, 0.4, 0.25, 1]
+        ease: [0.25, 0.4, 0.25, 1] as [number, number, number, number]
       }}
       whileHover={{ y: -8, scale: 1.02 }}
       className="group bg-white/80 backdrop-blur-sm rounded-3xl p-6 lg:p-8 shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-pink-100 hover:border-pink-300 relative overflow-hidden"
@@ -41,27 +77,6 @@ function ServiceCard({ icon, title, description, index }: { icon: React.ReactNod
 }
 
 export default function Home() {
-  // Animation variants for staggered children
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50/50 via-white to-purple-50/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 lg:pt-40 pb-16 sm:pb-24">
@@ -79,10 +94,8 @@ export default function Home() {
           >
             Welcome to{' '}
             <motion.span 
-              className="bg-gradient-primary text-gradient-primary block mt-2 sm:mt-4 py-2"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+              className="bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent block mt-2 sm:mt-4 py-2"
+              variants={highlightVariants}
             >
               flory_nshop.dz
             </motion.span>
@@ -129,7 +142,7 @@ export default function Home() {
                 </motion.div>
                 <div>
                   <motion.p 
-                    className="text-3xl sm:text-5xl font-black bg-gradient-primary text-gradient-primary leading-none"
+                    className="text-3xl sm:text-5xl font-black bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent leading-none"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 0.8 }}
