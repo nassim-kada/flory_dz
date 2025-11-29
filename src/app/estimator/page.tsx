@@ -16,7 +16,7 @@ export default function PriceEstimator() {
 
   const calculatePrice = (usdPrice: number): { total: number; fee: number } => {
     // Current base rate (example value)
-    const baseRate = 250;
+    const baseRate = 256;
     let serviceFee = 0;
 
     // Simplified service fee structure based on tiers
